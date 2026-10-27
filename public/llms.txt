@@ -1,0 +1,55 @@
+# Japan Driving Check
+
+> Free, unofficial checker for driving in Japan on a foreign license: which document a license from each country needs (1949 Geneva IDP, Japanese translation, or no route), the exact last driving day under the 1-year-from-landing rule, IDP validity and the residents' 3-month rule, and whether you can convert to a Japanese license (外免切替) after the 2025-10-01 changes. Rules as of 2026-10-27; Geneva list = NPA data as of May 2026.
+
+Site: https://japan-driving-check.vercel.app
+
+## Rules applied
+- Road Traffic Act art. 107-2: you may drive on (a) a 1949 Geneva Convention IDP + home license, or (b) a license from Switzerland, Germany, France, Belgium, Monaco or Taiwan + an official Japanese translation (issuing authority or embassy, JAF, 訪日運転者支援協会, ADAC for Germany, 台湾日本関係協会 or ZIPLUS for Taiwan). Vienna-format (1968) IDPs are not valid.
+- Period: up to 1 year counted from the landing date, never past the IDP's validity (1 year from issue) or the home license's expiry.
+- 3-month rule: people on the Basic Resident Register who leave and return in less than 3 months don't restart the count; 3 months or more restarts it. Visitors restart on each landing.
+- Geneva parties that issue no Geneva-format IDP (May 2026): Albania, Serbia, Monaco, Ghana, France, Montenegro, Cuba, Bulgaria, Liechtenstein, Côte d'Ivoire, Belgium, Rwanda, Zimbabwe, Botswana, Russia (France/Belgium/Monaco use the translation route). NPA inquiry open/unanswered: Algeria, CAR, Venezuela, Congo, Nigeria, Morocco, DR Congo, Niger, Lesotho, Jamaica, Haiti, Syria, Barbados; Uganda says Vienna only. UAE and Bangladesh issue two kinds of IDP, only the Geneva format works.
+- Not on the list (China, Vietnam, Brazil, Indonesia, Nepal, Myanmar, Mexico, Ukraine, Pakistan…): no short-term route; get a Japanese license.
+- 外免切替 (art. 97-2): valid foreign license; 3+ months (cumulative) in the issuing country after getting it; since 2025-10-01 a 住民票 copy (≤ 6 months old) is required, so tourists can't apply; in person, no proxies; ordinary license from 18 (apply from 17y6m); vision both eyes 0.7, each 0.3.
+- Tests waived (paperwork + eyes) for Iceland, Ireland, UK, Italy, Australia, Austria, Netherlands, Canada, Korea, Greece, Switzerland, Sweden, Spain, Slovenia, Czechia, Denmark, Germany, NZ, Norway, Hungary, Finland, France, Belgium, Poland, Portugal, Monaco, Luxembourg, Taiwan and US states OH, OR, CO, VA, HI, MD, WA. Indiana: driving check waived only. Others: knowledge check (50 questions, 45 to pass since 2025-10-01) + driving check.
+- Reported pass rates Oct–Dec 2025 (NPA via NTV 2026-03-05): knowledge 42.8%, driving 13.1% (2024: 92.5%, 30.4%).
+- Tokyo fees (ordinary): application ¥2,500 + issuance ¥2,350.
+
+## API (keyless, CORS open, JSON)
+GET https://japan-driving-check.vercel.app/api/check?country=US&usState=CA&document=idp&entryDate=2026-11-01&idpIssueDate=2026-06-15
+→ verdict "not_yet" (before landing), period.lastDay "2027-06-14" (limited by IDP validity), conversion.canApply "no" (visitor: no 住民票)
+
+GET https://japan-driving-check.vercel.app/api/check?country=CN&document=license_only&residency=resident&monthsInIssuingCountry=36
+→ verdict "not_valid", conversion.canApply "yes", tests "both"
+
+POST https://japan-driving-check.vercel.app/api/check
+{"country":"AU","document":"idp","residency":"resident","entryDate":"2025-11-01","trips":[{"left":"2026-06-01","returned":"2026-09-01"}]}
+→ 3+ months away restarts the year: period.countStart "2026-09-01", lastDay "2027-08-31"
+
+Parameters: country (ISO code or English/Japanese name, required), usState, document (auto | idp | translation | license_only | japanese_license), residency (visitor | resident | japanese_abroad), entryDate, trips (left_returned pairs, comma separated), idpIssueDate, licenseExpiry, monthsInIssuingCountry, age, today (all dates YYYY-MM-DD).
+Verdicts: can_drive | not_yet | expired | need_document | not_valid | unclear.
+
+## Other endpoints
+- GET https://japan-driving-check.vercel.app/api/rules
+- https://japan-driving-check.vercel.app/openapi.json
+- https://japan-driving-check.vercel.app/.well-known/ai-plugin.json
+- MCP: tool japan_driving_check on https://free-agent-tools.vercel.app/mcp
+
+## Sources
+- https://www.npa.go.jp/policies/application/license_renewal/have_DL_issed_another_country.html (NPA: foreign license holders)
+- https://www.keishicho.metro.tokyo.lg.jp/menkyo/menkyo/kokugai/kokugai04.html (Geneva Convention list, NPA data May 2026)
+- https://www.keishicho.metro.tokyo.lg.jp/menkyo/menkyo/kokugai/gaikokumenkyo.html (translation route, 3-month rule)
+- https://www.keishicho.metro.tokyo.lg.jp/menkyo/menkyo/kokugai/kokusaimenkyo.html (IDP rules)
+- https://www.keishicho.metro.tokyo.lg.jp/menkyo/menkyo/kokugai/kokugai05.html (外免切替: eligibility, exemptions, fees)
+- https://www.keishicho.metro.tokyo.lg.jp/menkyo/oshirase/low.html (2025-10-01 changes)
+- https://english.jaf.or.jp/driving-in-japan/drive-in-japan/switch-to-japanese-license (JAF)
+
+## Disclaimer
+Educational guide, not legal advice, not affiliated with the National Police Agency, prefectural police or JAF. Driving without a valid license (無免許運転) is a crime in Japan. Confirm with the police, your license center or rental company before you drive or apply.
+
+## Other free tools
+- https://japan-trip-brain.vercel.app (Japan trip planner)
+- https://japan-reentry-check.vercel.app (re-entry deadline)
+- https://japan-customs-allowance.vercel.app (duty-free allowance)
+- https://japan-parttime-check.vercel.app (part-time work on a visa)
+- https://free-agent-tools.vercel.app (MCP server with all tools)

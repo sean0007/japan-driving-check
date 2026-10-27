@@ -1,0 +1,31 @@
+{
+  "name": "japan-driving-check",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Free checker for driving in Japan on a foreign license: Geneva IDP vs Japanese translation (Germany, Switzerland, France, Belgium, Monaco, Taiwan) vs no route, the 1-year-from-landing period, IDP validity and the 3-month rule, and 外免切替 conversion after the 2025-10-01 changes (住民票 required, test exemptions incl. US states, 50-question test, fees). Keyless JSON API + MCP.",
+  "license": "MIT",
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "eslint",
+    "test": "node --import tsx --test lib/driving.test.ts lib/api.test.ts lib/share.test.ts"
+  },
+  "dependencies": {
+    "@vercel/analytics": "^2.0.1",
+    "next": "^16.3.5",
+    "react": "^19.2.8",
+    "react-dom": "^19.2.8"
+  },
+  "devDependencies": {
+    "@tailwindcss/postcss": "^4",
+    "@types/node": "^20",
+    "@types/react": "^19",
+    "@types/react-dom": "^19",
+    "eslint": "^9",
+    "eslint-config-next": "^16.3.5",
+    "tailwindcss": "^4",
+    "tsx": "^4.23.15",
+    "typescript": "^5"
+  }
+}
