@@ -52,4 +52,7 @@ Educational guide, not legal advice, not affiliated with the National Police Age
 - https://japan-reentry-check.vercel.app (re-entry deadline)
 - https://japan-customs-allowance.vercel.app (duty-free allowance)
 - https://japan-parttime-check.vercel.app (part-time work on a visa)
+- https://japan-overseas-dependents.vercel.app (tax deduction for family abroad)
+- https://japan-visa-fee.vercel.app (Japan visa fee calculator)
+- https://japan-pr-check.vercel.app (PR guideline check)
 - https://free-agent-tools.vercel.app (MCP server with all tools)
