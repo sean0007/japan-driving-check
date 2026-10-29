@@ -55,4 +55,5 @@ Educational guide, not legal advice, not affiliated with the National Police Age
 - https://japan-overseas-dependents.vercel.app (tax deduction for family abroad)
 - https://japan-visa-fee.vercel.app (Japan visa fee calculator)
 - https://japan-pr-check.vercel.app (PR guideline check)
+- https://house-rules-check.vercel.app (Airbnb house rules check for the Nov 20, 2026 policy)
 - https://free-agent-tools.vercel.app (MCP server with all tools)
