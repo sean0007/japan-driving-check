@@ -49,6 +49,36 @@ test("errors → 400 with disclaimer", async () => {
   }
 });
 
+test("unknown country code (XX) → 400 'not recognised' with example + disclaimer, not a not_valid verdict", async () => {
+  for (const q of ["?country=XX&document=idp", "?country=xx", "?country=ZZ&residency=resident"]) {
+    const res = await handler(new Request(`${PUBLIC_URL}${e.path}${q}&today=2026-10-29`));
+    assert.equal(res.status, 400, q);
+    const b = await res.json();
+    assert.match(b.error, /Unknown country/);
+    assert.ok(b.example);
+    assert.equal(b.disclaimer, API_DISCLAIMER);
+    assert.equal(b.verdict, undefined);
+  }
+});
+
+test("valid ISO codes still resolve: listed (NG → unclear, US → 200) and unlisted real code (AD → not_valid, no route)", async () => {
+  const ng = await handler(new Request(`${PUBLIC_URL}${e.path}?country=NG&today=2026-10-29`));
+  assert.equal(ng.status, 200);
+  const nb = await ng.json();
+  assert.equal(nb.country.code, "NG");
+  assert.equal(nb.verdict, "unclear");
+  assert.equal(nb.disclaimer, API_DISCLAIMER);
+  const us = await handler(new Request(`${PUBLIC_URL}${e.path}?country=us&usState=CA&document=idp&entryDate=2026-11-01&idpIssueDate=2026-06-15&today=2026-10-29`));
+  assert.equal(us.status, 200);
+  assert.equal((await us.json()).country.code, "US");
+  const ad = await handler(new Request(`${PUBLIC_URL}${e.path}?country=AD&today=2026-10-29`));
+  assert.equal(ad.status, 200);
+  const ab = await ad.json();
+  assert.equal(ab.country.code, "AD");
+  assert.equal(ab.verdict, "not_valid");
+  assert.equal(ab.disclaimer, API_DISCLAIMER);
+});
+
 test("openapi lists the check endpoint", () => {
   const doc = openapiDoc(API_INFO, PUBLIC_URL, Object.values(ENDPOINTS)) as { paths: Record<string, unknown> };
   assert.ok(doc.paths["/api/check"]);

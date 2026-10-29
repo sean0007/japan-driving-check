@@ -15,7 +15,9 @@ test("country lists match the NPA/Keishicho May 2026 tables", () => {
   assert.equal(resolveCountry("中国")?.code, "CN");
   assert.equal(resolveCountry("ドイツ")?.code, "DE");
   assert.equal(resolveCountry("Côte d'Ivoire")?.code, "CI");
-  assert.equal(resolveCountry("ZZ")?.route, "none");
+  assert.equal(resolveCountry("ZZ"), null); // not an ISO code → not recognised (API 400)
+  assert.equal(resolveCountry("XX"), null);
+  assert.equal(resolveCountry("AD")?.route, "none"); // real ISO code not on any list → no route
 });
 
 test("periodLastDay: 1 year counts the landing day; Feb 29 → Feb 28", () => {
