@@ -57,4 +57,5 @@ Educational guide, not legal advice, not affiliated with the National Police Age
 - https://japan-pr-check.vercel.app (PR guideline check)
 - https://house-rules-check.vercel.app (Airbnb house rules check for the Nov 20, 2026 policy)
 - https://japan-mynumber-card-check.vercel.app (My Number Card expiry check for foreign residents)
+- https://japan-hsp-points.vercel.app (HSP points calculator for the Highly Skilled Professional visa)
 - https://free-agent-tools.vercel.app (MCP server with all tools)
